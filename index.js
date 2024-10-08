@@ -7,18 +7,27 @@ class NobotAi {
     this.word_user_agent_blacklist = [];
   }
 
-  async setup() {
-    const txtUserAgent = await fs.readFile("user_agent_blacklist.txt", "utf-8");
+  async init() {
+    const txtUserAgent = await fs.readFile(
+      "node_modules/nobot-ai/user_agent_blacklist.txt",
+      "utf-8"
+    );
     this.word_user_agent_blacklist = txtUserAgent
       .trim()
       .split("\n")
       .map((word) => word.replace(/\r/g, ""));
-    const txtIp = await fs.readFile("ip_blacklist.txt", "utf-8");
+    const txtIp = await fs.readFile(
+      "node_modules/nobot-ai/ip_blacklist.txt",
+      "utf-8"
+    );
     this.ip_blacklist = txtIp
       .trim()
       .split("\n")
       .map((word) => word.replace(/\r/g, ""));
-    const txtIsp = await fs.readFile("isp_blacklist.txt", "utf-8");
+    const txtIsp = await fs.readFile(
+      "node_modules/nobot-ai/isp_blacklist.txt",
+      "utf-8"
+    );
     this.isp_blacklist = txtIsp
       .trim()
       .split("\n")
@@ -41,13 +50,16 @@ class NobotAi {
     if (!ipAddress) throw new Error("ip address required");
     const { ip_blacklist } = this;
     for (const ip of ip_blacklist) {
-      if (ipAddress === ip) {
+      if (ipAddress.includes(ip)) {
         return await callback(true, false);
       }
     }
     // check isp
     const res = await fetch(`http://ip-api.com/json/${ipAddress}`);
     const detailsIp = await res.json();
+    if (!detailsIp.isp) {
+      return await callback(true, false);
+    }
     detailsIp.isp = detailsIp?.isp?.toLowerCase();
     detailsIp.org = detailsIp?.org?.toLowerCase();
     detailsIp.as = detailsIp?.as?.toLowerCase();
