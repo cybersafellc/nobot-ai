@@ -23,7 +23,6 @@ create a package in the node modules "nobot-ai", and put all the coding for this
       }
     );
     console.log(isBlacklist)
-}
 ```
 
 ### validate user agent
@@ -41,5 +40,4 @@ create a package in the node modules "nobot-ai", and put all the coding for this
       }
     );
     console.log(isBlacklist)
-}
 ```
