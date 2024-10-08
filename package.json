@@ -12,7 +12,7 @@
     }
   },
   "description": "A package for detecting bots by checking user agents, IPs, and ISPs.",
-  "author": "Your Name",
+  "author": "rp_wcode",
   "license": "MIT",
   "devDependencies": {
     "@babel/preset-env": "^7.25.7",
