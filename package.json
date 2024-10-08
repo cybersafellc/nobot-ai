@@ -1,0 +1,9 @@
+{
+  "name": "nobot-ai",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "description": "A package for detecting bots by checking user agents, IPs, and ISPs.",
+  "author": "Your Name",
+  "license": "MIT"
+}

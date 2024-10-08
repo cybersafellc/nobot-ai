@@ -1,0 +1,22 @@
+googlebot
+msnbot
+baiduspider
+bingbot
+slurp
+yahoo
+ask jeeves
+fastcrawler
+infoseek jadikan array
+lycos
+yandex
+mediapartners-google
+crazywebcrawler
+adsbot-google
+feedfetcher-google
+curious george
+ia_archiver
+mj12bot
+uptimebot
+spider
+bot
+crawler
