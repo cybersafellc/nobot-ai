@@ -4,8 +4,6 @@
 
 Nobot AI is custom package for validate internet service isp
 
-## setup
-
 ## How to use ?
 
 create a package in the node modules "nobot-ai", and put all the coding for this project into it
