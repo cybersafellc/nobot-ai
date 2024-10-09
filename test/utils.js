@@ -14,7 +14,7 @@ const robot = {
 
 const ip = {
   blocked: "127.0.0.1",
-  non_blocked: "192.168.10.1",
+  non_blocked: "76.150.19.165",
 };
 
 export { human, robot, ip };

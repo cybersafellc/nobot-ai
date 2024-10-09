@@ -8,26 +8,17 @@ class NobotAi {
   }
 
   async init() {
-    const txtUserAgent = await fs.readFile(
-      "node_modules/nobot-ai/user_agent_blacklist.txt",
-      "utf-8"
-    );
+    const txtUserAgent = await fs.readFile("user_agent_blacklist.txt", "utf-8");
     this.word_user_agent_blacklist = txtUserAgent
       .trim()
       .split("\n")
       .map((word) => word.replace(/\r/g, ""));
-    const txtIp = await fs.readFile(
-      "node_modules/nobot-ai/ip_blacklist.txt",
-      "utf-8"
-    );
+    const txtIp = await fs.readFile("ip_blacklist.txt", "utf-8");
     this.ip_blacklist = txtIp
       .trim()
       .split("\n")
       .map((word) => word.replace(/\r/g, ""));
-    const txtIsp = await fs.readFile(
-      "node_modules/nobot-ai/isp_blacklist.txt",
-      "utf-8"
-    );
+    const txtIsp = await fs.readFile("isp_blacklist.txt", "utf-8");
     this.isp_blacklist = txtIsp
       .trim()
       .split("\n")
@@ -47,7 +38,7 @@ class NobotAi {
 
   async verifyIpAddress(ipAddress, callback) {
     // check list blocked ip
-    if (!ipAddress) throw new Error("ip address required");
+    if (!ipAddress) return await callback(true, false);
     const { ip_blacklist } = this;
     for (const ip of ip_blacklist) {
       if (ipAddress.includes(ip)) {
@@ -69,6 +60,43 @@ class NobotAi {
         detailsIp?.isp?.includes(isp) ||
         detailsIp?.as?.includes(isp) ||
         detailsIp?.org?.includes(isp)
+      ) {
+        return await callback(true, false);
+      }
+    }
+    return await callback(false, true);
+  }
+
+  async completeVerify(userAgent, ipAddress, callback) {
+    if (!userAgent || !ipAddress) return await callback(true, false);
+    //check user agent
+    const newUserAgent = userAgent.toLowerCase();
+    const { word_user_agent_blacklist } = this;
+    for (const word of word_user_agent_blacklist) {
+      if (newUserAgent.includes(word)) {
+        return await callback(true, false);
+      }
+    }
+    // check ip blacklist
+    const { ip_blacklist } = this;
+    for (const ip of ip_blacklist) {
+      if (ipAddress.includes(ip)) {
+        return await callback(true, false);
+      }
+    }
+    // check isp
+    const res = await fetch(`http://ip-api.com/json/${ipAddress}`);
+    const response = await res.json();
+    if (!response.isp) return await callback(true, false);
+    response.org = response.org.toLowerCase();
+    response.isp = response.isp.toLowerCase();
+    response.as = response.as.toLowerCase();
+    const { isp_blacklist } = this;
+    for (const isp of isp_blacklist) {
+      if (
+        response.isp.includes(isp) ||
+        response.as.includes(isp) ||
+        response.org.includes(isp)
       ) {
         return await callback(true, false);
       }
